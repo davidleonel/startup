@@ -1,2 +1,5 @@
 The Basics of HTML:
-Ultimo punto que nos pide checker al codigo en diferentes browsers no lo pude hacer por que estoy trabajando desde una compu que no es mia, ya la semana que viene voy a tener otra compu para poder instalar los otros navegadores y el emulador de android.
+-Ultimo punto que nos pide checker al codigo en diferentes browsers no lo pude hacer por que estoy trabajando desde una compu que no es mia, ya la semana que viene voy a tener otra compu para poder instalar los otros navegadores y el emulador de android.
+
+Doctypes & Metatags:
+E-stos puntos los hice con el archivo de singUpForm ya que ese era el ultimo que que el primer apartado nos pidio generar.
