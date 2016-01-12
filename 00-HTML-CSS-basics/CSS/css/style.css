@@ -1,22 +1,50 @@
-html{
+html *{
 	font-size: 14px;
 	font-family: Arial;
+	font-weight: bold;
 }
 
 header{
 	text-align: center;
-	background-color: #4d9898;
+
 }
 
 footer{
 	text-align: center;
-	background-color: #669966;
+
 }
 
 aside{
-	background-color: #7c1c1c;
+	background-color: blue;
 }
 
 nav{
-	background-color: #62999a;
+	background-color: blue;
+}
+
+.header{
+	font-size: 46px;
+}
+.navigation{
+	font-size: 12px;
+}
+.content{
+	font-size: 14px;
+}
+.sidebar{
+	font-size: 10px;
+}
+.footer{
+	font-size: 10px;
+}
+
+*[class*="a"] {
+	background-color: blue;
+}
+*[class$="r"]{
+	background-color: magenta;
+}
+
+.oh-no-inline-styles{
+	background: green !important;
 }
