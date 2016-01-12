@@ -1,0 +1,2 @@
+The Basics of HTML:
+Ultimo punto que nos pide checker al codigo en diferentes browsers no lo pude hacer por que estoy trabajando desde una compu que no es mia, ya la semana que viene voy a tener otra compu para poder instalar los otros navegadores y el emulador de android.
