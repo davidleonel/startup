@@ -30,7 +30,7 @@ aside, nav{
 	width: 40%; 
 	height:60%; 
 	float: left;
-	padding-bottom:100px;
+	
 }
 .sidebar{
 	font-size: 10px;
@@ -45,6 +45,7 @@ aside, nav{
 	position:absolute;
 	bottom:0;
 	left:0;
+
 
 }
 
