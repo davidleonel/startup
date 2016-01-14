@@ -1,0 +1,142 @@
+/* Layout
+   ========================================================================== */
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  font: 100%/1.5 "Open Sans", sans-serif;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (min-width: 640px) {
+  html { font-size: 112%; }
+}
+
+@media (min-width: 1024px) {
+  html { font-size: 120%; }
+}
+
+body {
+  background-color: #fff;
+  color: #555;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 848px;
+  width: 90%;
+}
+
+section {
+  border-top: 1px solid #eee;
+  text-align: center;
+  padding: 32px 0;
+}
+
+section:first-of-type { border-top: none; }
+
+@media (min-width: 640px) {
+  section { padding: 64px 0; }
+}
+
+/* Mobile First Grid
+   ========================================================================== */
+
+.column { 
+  position: relative;
+  margin-bottom: 24px; }
+
+@media (min-width: 640px) {
+  .column {
+    float: left;
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .column.full { width: 100%; }
+  .column.two-thirds { width: 66.7%; }
+  .column.half { width: 50%; }
+  .column.third { width: 33.3%; }
+  .column.fourth { width: 25%; }
+  .column.flow-opposite { float: right; }
+}
+
+
+
+h1 {
+  font-weight: 600;
+  margin: 0;
+	text-align: left;
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 640px) {
+  h1 { font-size: 24px; }
+}
+
+
+p {
+  color: #999;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+
+
+a {
+  color: #497bad;
+  text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+
+
+img {
+  display: block;
+  height: auto;
+  margin: 0 auto 24px auto;
+  width: 100%;
+}
+
+
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after { clear: both; }
+.clearfix { *zoom: 1; }
+
+
+.screen {
+
+	background-color: rgba(0,0,0,0.5);
+	height: 100%;
+	width: 100%;
+  position:absolute;
+	opacity: 0;
+  z-index: 2;
+  filter: alpha(opacity=60); /* For IE8 and earlier */
+
+  -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+      -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+          transition: all 0.3s ease-in-out;
+
+}
+.screen:hover {
+  opacity: 1
+}
