@@ -6,9 +6,21 @@ $(document).ready(function() {
 });
 
 $("#button").click(function (){
-	
 
-	$(".answer").load("http://bootcamp.aws.af.cm/welcome/yourname", function (responseText, textStatus, req) {
+	$.ajax({
+		url: "http://bootcamp.aws.af.cm/welcome/David",
+		success: function(result){
+			$(".answer").html(result);
+		},
+		error: function(){
+			$(".hidden").css("color","red");
+		},
+	});
+
+	$(".answer").css("background-color","yellow");
+
+	/*
+	$(".answer").load("http://bootcamp.aws.af.cm/welcome/David", function (responseText, textStatus, req) {
 
 		if (textStatus == "error"){
 			$(".hidden").css("color","red");
@@ -16,6 +28,6 @@ $("#button").click(function (){
 		}
 
 	});
-	
+	*/
 });
 
