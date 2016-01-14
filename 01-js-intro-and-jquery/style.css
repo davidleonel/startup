@@ -1,4 +1,6 @@
-section{
+.hidden{
+
 	text-align: center;
+	display: none;
 }
 

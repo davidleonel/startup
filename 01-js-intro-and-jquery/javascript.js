@@ -1,16 +1,17 @@
 $(document).ready(function() {
 
-	$(".hidden").hide().fadeIn("slow");
+	//$('.hidden').css('display','initial').fadeIn('slow');
+	$('.hidden').fadeIn("slow");
 	$(".alias").focus();
 });
 
 $("#button").click(function (){
 	
 
-	$(".answer").load("http://bootcamp.aws.af.cm/welcome/yourname.html", function (responseText, textStatus, req) {
-		
+	$(".answer").load("http://bootcamp.aws.af.cm/welcome/yourname", function (responseText, textStatus, req) {
+
 		if (textStatus == "error"){
-			$("section").css("color","red");
+			$(".hidden").css("color","red");
         	return "ERROR!!";
 		}
 
