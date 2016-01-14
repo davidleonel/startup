@@ -1,33 +1,49 @@
 $(document).ready(function() {
+	
+	$("#txtName").focus();
 
-	//$('.hidden').css('display','initial').fadeIn('slow');
-	$('.hidden').fadeIn("slow");
-	$(".alias").focus();
-});
+	$("#btnName").click(function (){
+		/*
+		$(".answer").load("http://bootcamp.aws.af.cm/welcome/David", function (responseText, textStatus, req) {
 
-$("#button").click(function (){
+			if (textStatus == "error"){
+				$(".hidden").css("color","red");
+	        	return "ERROR!!";
+			}
 
-	$.ajax({
-		url: "http://bootcamp.aws.af.cm/welcome/David",
-		success: function(result){
-			$(".answer").html(result);
-		},
-		error: function(){
-			$(".hidden").css("color","red");
-		},
+		});
+		*/
+		var name = document.getElementById("txtName").value;
+
+		$.ajax({
+			url: "http://bootcamp.aws.af.cm/welcome/"+name,
+			success: function(result){
+				$(".answer").html(result);
+				$(".answer").css("background-color","yellow");
+			},
+			error: function(){
+				$(".answer").html("ERROR!!!");
+				$("section").css("color","red");
+			},
+		});
+		$('.answer').fadeIn("slow");
 	});
 
-	$(".answer").css("background-color","yellow");
 
-	/*
-	$(".answer").load("http://bootcamp.aws.af.cm/welcome/David", function (responseText, textStatus, req) {
+	$("#btnName").click(function (){
 
-		if (textStatus == "error"){
-			$(".hidden").css("color","red");
-        	return "ERROR!!";
-		}
+		var search = document.getElementById("txtSearch").value;
+
+		$.ajax({
+			url: " https://api.spotify.com/v1/"+search,
+			success: function(result){
+				console.log(result);
+			},
+		});
 
 	});
-	*/
-});
 
+
+
+	
+});

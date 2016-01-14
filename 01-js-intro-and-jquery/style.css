@@ -1,6 +1,9 @@
-.hidden{
-
+section{
 	text-align: center;
+}
+
+.answer{
 	display: none;
 }
+
 
