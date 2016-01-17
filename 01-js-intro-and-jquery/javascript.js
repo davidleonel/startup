@@ -2,29 +2,10 @@ $(document).ready(function() {
 	
 	$("#txtName").focus();
 
-	$("#btnName").click(function (){
-
-
-		var name = document.getElementById("txtName").value;
-
-		$.ajax({
-			url: "http://bootcamp.aws.af.cm/welcome/yourname",
-			data: {name},
-			success: function(result){
-				$(".answer").html(result);
-				$(".answer").css("background-color","yellow");
-			},
-			error: function(){
-				$(".answer").html("ERROR!!!");
-				$("section").css("color","red");
-			},
-		});
-		$('.answer').fadeIn("slow");
-	});
-
 
 	$("#btnSearch").click(function (){
 
+		$('li').fadeOut("slow", function(){$(this).remove();});
 		var search = document.getElementById("txtSearch").value;
 		var searchType = "track";
 		$.ajax({
@@ -32,14 +13,16 @@ $(document).ready(function() {
 			data: {q: search, type: searchType},
 			success: function(result){
 				console.log(result);
-				if(result){
-					$('.answerSongs').fadeIn("slow");
+
+				if(result){	
 	                var len = result.tracks.items.length;
-	                if(len > 0){	                   
+	                if(len > 0){
+
 	                    for(var i=0;i<len;i++){
-	                        $("#albums").append("<li> Track Name: "+result.tracks.items[i].name+"</br> Artist: "+result.tracks.items[i].artists[0].name+"</br>Duration: "+result.tracks.items[i].duration_ms+"</li>");
+	                        $("#tracks").append("<li> Track Name: "+result.tracks.items[i].name+"</br> Artist: "+result.tracks.items[i].artists[0].name+"</br>Duration: "+result.tracks.items[i].duration_ms+"</li>");
 	                    }
 	                }
+	                $('.answerSongs').fadeIn("slow");
             	}
 			},
 			error: function(){
@@ -54,15 +37,3 @@ $(document).ready(function() {
 	
 });
 
-/* ALBUMS
-if(result){
-					$('.answerSongs').fadeIn("slow");
-	                var len = result.albums.items.length;
-	                if(len > 0){	                   
-	                    for(var i=0;i<len;i++){
-	                        $("#albums").append("<li>"+result.albums.items[i].name+"</li>");
-	                    }
-	                }
-            	}
-
-*/

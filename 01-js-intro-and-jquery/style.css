@@ -1,16 +1,14 @@
 .leftSidebar{
-	width: 50%;
-	height: 100%;
 	float: left;
-	border: solid red 1px;
+	height: 100%;
+	width: 50%;
+
 }
 
 .rightList{
-	width: 50%;
-	height: 100%;
 	float: right;
-	border: solid blue 1px;
-
+	height: 100%;
+	width: 50%;
 }
 
 section{
@@ -22,6 +20,9 @@ section{
 }
 .answerSongs{
 	display: none;
+}
+#tracks{
+	text-align: left;
 }
 
 
