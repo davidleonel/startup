@@ -1,8 +1,26 @@
+.leftSidebar{
+	width: 50%;
+	height: 100%;
+	float: left;
+	border: solid red 1px;
+}
+
+.rightList{
+	width: 50%;
+	height: 100%;
+	float: right;
+	border: solid blue 1px;
+
+}
+
 section{
 	text-align: center;
 }
 
 .answer{
+	display: none;
+}
+.answerSongs{
 	display: none;
 }
 
