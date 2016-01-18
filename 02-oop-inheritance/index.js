@@ -1,3 +1,4 @@
+(function (){
 var droid = new Track();
 var trackObserver = new TrackObserver([...]);
 
@@ -6,3 +7,5 @@ droid.set('title', 'Droid');
 droid.addObserver(trackObserver);
 
 droid.play(); // console: Playing Droid...
+
+}());

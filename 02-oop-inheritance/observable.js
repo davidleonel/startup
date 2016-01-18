@@ -5,13 +5,12 @@ Observable = function(){
 };
 
 
-Observable.prototype.addObserver = function(event, observer){
-	//event ??????????????????
+Observable.prototype.addObserver = function(observer){
 	this.observers.push(observer);
 };
 Observable.prototype.notify = function(event){
-	//event ??????????????????
+	
 	for(var i = 0; i < this.observers.lenght; i++){
-		this.observers[i].update("some data");
+		this.observers[i].update("some data -- event");
 	}
 };
