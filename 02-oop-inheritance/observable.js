@@ -1,0 +1,17 @@
+Observable = function(){
+
+	this.observers = [];
+
+};
+
+
+Observable.prototype.addObserver = function(event, observer){
+	//event ??????????????????
+	this.observers.push(observer);
+};
+Observable.prototype.notify = function(event){
+	//event ??????????????????
+	for(var i = 0; i < this.observers.lenght; i++){
+		this.observers[i].update("some data");
+	}
+};
