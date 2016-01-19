@@ -1,4 +1,4 @@
-var TrackModule = function () {
+Track = function () {
 
 		var init = function(title, artist, duration){
 			var title = title;
