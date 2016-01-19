@@ -1,9 +1,4 @@
-//i dont know if you want me to separete all the clasees
- //in different files like i did or you prefer all in just one 
- //big file, le tme know if you want me to change it and ill put 
- //everything in just one single file
 
-(function (){
 var droid = new Track();
 var trackObserver = new TrackObserver();
 
@@ -13,11 +8,22 @@ droid.addObserver(trackObserver);
 
 droid.play(); // console: Playing Droid...
 
-// I dont understand why i have to set the correct prototype to DownloadableTrack.
-//doing this works, but may be i didnt understand what it is that the exercise is asking for :S haha
-$.extend(TrackModule, DownloadableTrack);
+function extend(target, source){
+    for(var prop in source)
+        if(source.hasOwnProperty(prop))
+            target[prop] = source[prop];
+    return target;
+}
 
-var t = TrackModule;
-tt.download(); // console: Track available to download!!
+var newExtendedTrack = extend(Track, DownloadableTrack);
 
-}());
+newExtendedTrack.download(); // console: Track available to download!!
+
+
+
+//$.extend(TrackModule, DownloadableTrack);
+
+
+
+
+

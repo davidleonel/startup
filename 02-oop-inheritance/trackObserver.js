@@ -1,5 +1,9 @@
 //Constructor Function
-TrackObserver  = function(event){};
-//Event ??????
+TrackObserver  = function(callback){
+	for (var i = 0; i < callback.lenght; i++) {
+		callback[i]();
+	}
+};
+
 
 TrackObserver.prototype.update = function(event){};

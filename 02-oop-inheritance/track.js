@@ -1,36 +1,35 @@
 Track = function () {
 
-		var init = function(title, artist, duration){
-			var title = title;
-			var artist = artist;
-			var duration = duration;
-			var observable = new Observable(); 
-		},
+	var title;
+	var artist;
+	var duration;
+	var observable = new Observable(); 
+	addObserver = function (observer){
+ 		observable.addObserver(observer)};
 
-		addObserver = function (observer){
+	return {
+
+		/*addObserver: function (observer){
 			this.observable.addObserver(observer);
-		}; 
-
-		return {
-			init: init,
-			addObserver: addObserver,
-
-			play : function(){
-				console.log("Playing "+this.title);
-			},
-			stop : function(){0
-				console.log(this.title+" Stopped playing");
-			},
-			set : function(attr, value){
-				var temp = attr;
-				this[temp] = value;
-			},
-			get : function(attr){
-				var temp = attr;	
-				return this[temp];
-			},
-		
-		};		
+		},
+*/		
+		addObserver: addObserver,
+		play : function(){
+			console.log("Playing "+this.title);
+		},
+		stop : function(){0
+			console.log(this.title+" Stopped playing");
+		},
+		set : function(attr, value){
+			var temp = attr;
+			this[temp] = value;
+		},
+		get : function(attr){
+			var temp = attr;	
+			return this[temp];
+		},
+	
+	};		
 
 }();
 
