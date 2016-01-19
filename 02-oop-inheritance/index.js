@@ -1,3 +1,8 @@
+//i dont know if you want me to separete all the clasees
+ //in different files like i did or you prefer all in just one 
+ //big file, le tme know if you want me to change it and ill put 
+ //everything in just one single file
+
 (function (){
 var droid = new Track();
 var trackObserver = new TrackObserver();
