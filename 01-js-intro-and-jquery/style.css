@@ -1,0 +1,28 @@
+.leftSidebar{
+	float: left;
+	height: 100%;
+	width: 50%;
+
+}
+
+.rightList{
+	float: right;
+	height: 100%;
+	width: 50%;
+}
+
+section{
+	text-align: center;
+}
+
+.answer{
+	display: none;
+}
+.answerSongs{
+	display: none;
+}
+#tracks{
+	text-align: left;
+}
+
+
