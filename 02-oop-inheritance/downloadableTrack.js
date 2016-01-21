@@ -1,9 +1,0 @@
-DownloadableTrack = function(){
-
-	return{
-		download : function(){
-			console.log("Track available to download!!");
-		}
-	}
-
-}();
