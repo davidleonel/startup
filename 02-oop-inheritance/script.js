@@ -1,54 +1,60 @@
 //------------------------OBSERVABLE--------------
 var Observable = function(){
-
 	this.observers = [];
-
 };
-
-
 Observable.prototype.addObserver = function(observer){
 	this.observers.push(observer);
 };
 Observable.prototype.notify = function(event){
 	
-	for(var i = 0; i < this.observers.lenght; i++){
-		this.observers[i].update(event);
-	}
-    for (var i = 0; i < this.observers.length ; i++) {  
+    for (var i = 0; i < this.observers.length ; i++) { 
+
         for (j = 0; j < this.observers[i].eventCallback.length; j++) {
             
-            if (this.observers[i].eventCallback[j] === event) {
-                if (event === 'play') {
-                    this.observers[i].play(this);
-                } else if (event === 'stop') {
-                    this.observers[i].stop(this);
-                } else if (event === 'download') {
-                    this.observers[i].download(this);
-                }
-            }
+        	if(this.observers[i].eventCallback[j].method === event){
+    		this.observers[i].eventCallback[j].callback(this);
+    		}
+
         }
     }
 };
 
-
 //------------------------OBSERVER-------------------
-var TrackObserver  = function(eventCallback){
+var Observer  = function Observer(eventCallback){
+    
     this.eventCallback = eventCallback || [] ;
 };
 
-TrackObserver.prototype.play = function (track) {
-    console.log('Playing: ' + track.title + '.');
-};
-
-TrackObserver.prototype.stop = function (track) {
-    console.log('Stopped: ' + track.title + '.');
-};
-
-TrackObserver.prototype.download = function (track) {
-    console.log('Downloading: ' + track.title + '.');
-};
-
-//-------------------------------------------------------
+//------------------------TRACKOBSERVER-------------------
+var TrackObserver  = new Observer ([
+  /*i think it works better now bu i just dont know how to get the title 
+  of the track all the way here so i can print it out on console :(
+  	*/
+    {
+		method: "play", 
+		callback: function() {
+		 	console.log("Playing "); //+ track.title
+		}
+	},
+	{
+		method: "stop", 
+		callback: function() {
+		 	console.log("Stopped "); //+ track.title
+		}
+	},
+	{
+		method: "download",
+		callback: function() {
+		 	console.log("Downloading "); //+ track.title
+		}
+	},
+		{
+		method: "share", 
+		callback: function(message) {
+		 	console.log("Sharing with: " + message); // falta el mesnsaje
+		}
+	}
+]);
 
 
 //----------------------------TRACK----------------------
@@ -66,10 +72,10 @@ var Track = (function () {
 		this.observable.addObserver(observer)
 	};
 	Track.prototype.play = function(){
-		console.log("Playing "+this.title);
+		this.observable.notify("play");
 	};
-	Track.prototype.stop = function(){0
-		console.log(this.title+" Stopped playing");
+	Track.prototype.stop = function(){
+		this.observable.notify("stop");
 	},
 	Track.prototype.set = function(attr, value){
 		var temp = attr;
@@ -90,11 +96,11 @@ var Track = (function () {
 
 //----------------------DownloadableTrack------------
 
-var DownloadableTrack = function(title, artist, duration){
+var DownloadableTrack = function DownloadableTrack (title, artist, duration){
 	Track.call(this, title, artist, duration);
 };
 DownloadableTrack.prototype.download = function(){
-	console.log("Track available to download!!");
+	this.notify("download");
 	};
 
 
@@ -113,7 +119,9 @@ var Social = function(){
 };
 
 Social.prototype.share = function(friendName){
-	console.log("Sharing " + this.title + " with " + friendName);
+	//console.log("Sharing " + this.title + " with " + friendName);
+	var message = friendName;	
+	this.observable.notify("share", message);
 };
 Social.prototype.like = function(){
 	console.log("Liked");
@@ -143,8 +151,3 @@ var Artist = function (firstName, lastName, age) {
     this.lastName = lastName;
     this.age = age;
 };
-
-
-
-
-
