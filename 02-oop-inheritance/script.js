@@ -5,14 +5,14 @@ var Observable = function(){
 Observable.prototype.addObserver = function(observer){
 	this.observers.push(observer);
 };
-Observable.prototype.notify = function(event){
+Observable.prototype.notify = function(event, track){
 	
     for (var i = 0; i < this.observers.length ; i++) { 
 
         for (j = 0; j < this.observers[i].eventCallback.length; j++) {
             
         	if(this.observers[i].eventCallback[j].method === event){
-    		this.observers[i].eventCallback[j].callback(this);
+    		this.observers[i].eventCallback[j].callback(track);
     		}
 
         }
@@ -26,32 +26,30 @@ var Observer  = function Observer(eventCallback){
 };
 
 //------------------------TRACKOBSERVER-------------------
-var TrackObserver  = new Observer ([
-  /*i think it works better now bu i just dont know how to get the title 
-  of the track all the way here so i can print it out on console :(
-  	*/
+var trackObserver  = new Observer ([
+
     {
 		method: "play", 
-		callback: function() {
-		 	console.log("Playing "); //+ track.title
+		callback: function(track) {
+		 	console.log("Playing " + track.title); 
 		}
 	},
 	{
 		method: "stop", 
-		callback: function() {
-		 	console.log("Stopped "); //+ track.title
+		callback: function(track) {
+		 	console.log("Stopped " + track.title); 
 		}
 	},
 	{
 		method: "download",
-		callback: function() {
-		 	console.log("Downloading "); //+ track.title
+		callback: function(track) {
+		 	console.log("Downloading " + track.title); 
 		}
 	},
 		{
 		method: "share", 
 		callback: function(message) {
-		 	console.log("Sharing with: " + message); // falta el mesnsaje
+		 	console.log("Sharing with: " + message); 
 		}
 	}
 ]);
@@ -72,10 +70,10 @@ var Track = (function () {
 		this.observable.addObserver(observer)
 	};
 	Track.prototype.play = function(){
-		this.observable.notify("play");
+		this.observable.notify("play", this);
 	};
 	Track.prototype.stop = function(){
-		this.observable.notify("stop");
+		this.observable.notify("stop", this);
 	},
 	Track.prototype.set = function(attr, value){
 		var temp = attr;
@@ -100,7 +98,7 @@ var DownloadableTrack = function DownloadableTrack (title, artist, duration){
 	Track.call(this, title, artist, duration);
 };
 DownloadableTrack.prototype.download = function(){
-	this.notify("download");
+	this.notify("download", this);
 	};
 
 
@@ -111,7 +109,7 @@ var extend = function (child, parent){
     child.prototype = copyOfParent;
 }
 
-//extend(DownloadableTrack, Track);
+
 
 //----------------------SOCIAL------------
 
@@ -119,9 +117,7 @@ var Social = function(){
 };
 
 Social.prototype.share = function(friendName){
-	//console.log("Sharing " + this.title + " with " + friendName);
-	var message = friendName;	
-	this.observable.notify("share", message);
+	this.observable.notify("share", friendName);
 };
 Social.prototype.like = function(){
 	console.log("Liked");
@@ -142,8 +138,6 @@ var mixinAugment = function (target, source){
         }
     }
 }
-
-//mixinAugment(Track, Social, "share");
 
 //----------------------Artist------------
 var Artist = function (firstName, lastName, age) {
