@@ -4,7 +4,7 @@ var Track = function (title, artist, duration, artists){
 		this.title = title;
 		this.artist = artist;
 		this.duration = duration;
-		this.artists = artists || [];
+		this.artists = null;
 		//this.observable = new Observable(); 
 };
 	
