@@ -14,7 +14,7 @@ Track.prototype.addObserver = function (observer){
 Track.prototype.play = function(){
 	console.log("Playing "+this.title);
 };
-Track.prototype.stop = function(){0
+Track.prototype.stop = function(){
 	console.log(this.title+" Stopped playing");
 },
 Track.prototype.set = function(attr, value){
@@ -29,7 +29,5 @@ Track.prototype.addMember = function (artist) {
     this.artists.push(artist);
 };
 		
-
-};
 
 module.exports = Track;
