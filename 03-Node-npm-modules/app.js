@@ -5,25 +5,34 @@ var Artist = function(name, awards){
 };
 
 Artist.prototype.recognice = function(){
-	console.log(this.name + "has the following awards: ");
-	for(award in this.awards){
-		console.log(award);
+	console.log(this.name + " has the following awards: ");
+	for(i = 0; i < this.awards.length; i++){
+		console.log(this.awards[i]);
 	};
 };
 
-Artist.prototype.set = function(attr, values){
+Artist.prototype.set = function (attr, value) {
+    var temp = attr;
+	this[temp] = value;
+	
+};
+
+Artist.prototype.setAwards = function(values){
 
 	for (i = 0; i < values.length; i++){
-		this[attr].push(values[i]);
+		this.awards.push(values[i]);
 	};
 
-	/*var temp = attr;
-	this[temp] = value;
-	*/
+
 };
 
 module.exports = Artist;
 
+
+/*
+var a = new Artist("David");
+a.setAwards(["XX", "ZZ"]);
+a.recognice();*/
 },{}],2:[function(require,module,exports){
 var Artist = require('./artist');
 var Track = function (title, artist, duration, artists){
@@ -32,18 +41,8 @@ var Track = function (title, artist, duration, artists){
 		this.artist = artist;
 		this.duration = duration;
 		this.artists = null;
-		//this.observable = new Observable(); 
 };
 	
-Track.prototype.addObserver = function (observer){
-	this.observable.addObserver(observer)
-};
-Track.prototype.play = function(){
-	console.log("Playing "+this.title);
-};
-Track.prototype.stop = function(){
-	console.log(this.title+" Stopped playing");
-},
 Track.prototype.set = function(attr, value){
 	var temp = attr;
 	this[temp] = value;
@@ -52,11 +51,7 @@ Track.prototype.get = function(attr){
 	var temp = attr;	
 	return this[temp];
 };
-Track.prototype.addMember = function (artist) {
-    this.artists.push(artist);
-};
-		
-
+	
 module.exports = Track;
 
-},{"./artist":1}]},{},[2,1]);
+},{"./artist":1}]},{},[1,2]);
