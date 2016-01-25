@@ -4,10 +4,11 @@ var Artist = function(name, awards){
 };
 
 Artist.prototype.recognice = function(){
-	console.log(this.name + " has the following awards: ");
+	var msg = this.name + " has the following awards: ";
 	for(i = 0; i < this.awards.length; i++){
-		console.log(this.awards[i]);
+		msg += this.awards[i] + ' ';
 	};
+    return msg;
 };
 
 Artist.prototype.set = function (attr, value) {
@@ -16,19 +17,4 @@ Artist.prototype.set = function (attr, value) {
 	
 };
 
-Artist.prototype.setAwards = function(values){
-
-	for (i = 0; i < values.length; i++){
-		this.awards.push(values[i]);
-	};
-
-
-};
-
 module.exports = Artist;
-
-
-/*
-var a = new Artist("David");
-a.setAwards(["XX", "ZZ"]);
-a.recognice();*/
