@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html ng-app="topic5">
+  <head>
+    <title></title>    
+  </head>
+  <body>
+  	<div ng-controller = "trackController">
+  		<ul>
+  			<li ng-repeat = "track in tracks"> {{ track.title }} - {{ track.artist }}
+  				<button class="detail">Show Details</button>
+  			</li>
+  		</ul>
+  	</div>
+  	
+
+  	<script type="text/javascript" src="angular.min.js" ></script>
+  	<script type="text/javascript" src="app.js" ></script>
+  </body>
+</html>
