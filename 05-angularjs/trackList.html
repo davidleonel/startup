@@ -1,0 +1,7 @@
+<div ng-controller="trackController">
+	<ul>
+		<li ng-repeat = "track in tracks"> {{ track.title }} - {{ track.artist }}
+			<button ng-click="viewDetail">Show Details</button>
+		</li>
+	</ul>
+</div>
