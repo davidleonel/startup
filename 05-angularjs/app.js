@@ -12,7 +12,7 @@ topic5.config(function ($urlRouterProvider,$stateProvider){
 		controller:"trackController"
 	})
 
-	.state("trackDetails",{
+	.state("home.trackDetails",{
 		url: "/trackDetails",
 		templateUrl:"partials/trackDetails.html",
 		controller:"trackDetailsController"
@@ -22,6 +22,12 @@ topic5.config(function ($urlRouterProvider,$stateProvider){
 		url: "/addTrack",
 		templateUrl: "partials/addTrack.html",
 		controller:"addNewTrackController"
+	})
+
+	.state("home.editTrack",{
+		url: "/trackDetails",
+		templateUrl:"partials/editTrack.html",
+		controller:"trackList"
 	});
 
 	$urlRouterProvider.otherwise("/");
@@ -40,21 +46,30 @@ topic5.factory("trackFactory", function(){
 	];
 
 	var factory = {};
+	var sTrack= null;
 
 	factory.getTracks = function(){
 		return tracks;
 	};
 
-	factory.getSelectedTrack = function(title){
-		for(track in tracks){
-			if(track.title == title){
-				return track;
-			}
-		}
-	};
-
 	factory.addTrack = function(newTrack){
 		tracks.push(newTrack)
+	};
+	factory.deleteTrack = function(selectedTrack){
+		for(var i =0; i < tracks.length; i++) {
+    		if(tracks[i] === selectedTrack) {
+       			tracks.splice(i, 1);
+    		}
+		}
+	};
+	factory.editTrack = function(selectedTrack){
+		tracks.push(newTrack)
+	};
+	factory.setSelectedTrack = function(selectedTrack){
+		sTrack = selectedTrack
+	};
+	factory.getSelectedTrack = function(){
+		return sTrack;
 	};
 
 	return factory;
@@ -71,16 +86,31 @@ topic5.controller("trackController", function($scope, trackFactory){
 	
 	$scope.tracks = trackFactory.getTracks();
 
-	$scope.viewSongDetails = function(title){
-		var selectedTrack = trackFactory.getSelectedTrack();
-		return selectedTrack;
+	$scope.viewDetail = function (selectedTrack){
+		trackFactory.setSelectedTrack(selectedTrack);
 	};
+	$scope.editTrack = function(selectedTrack){
+		trackFactory.editTrack({
+			title: $scope.newTrack.title, 
+			artist: $scope.newTrack.artist, 
+			duration: $scope.newTrack.duration 
+		});
+	};
+	$scope.deleteTrack = function(selectedTrack){
+		trackFactory.deleteTrack(selectedTrack);
+	};
+
+});
+
+topic5.controller("trackDetailsController", function($scope, trackFactory){
+	
+	$scope.selectedTrack = trackFactory.getSelectedTrack();
 
 });
 
 topic5.controller("addNewTrackController", function($scope, trackFactory){
 
-	$scope.addNewSong = function(){
+	$scope.addNewTrack = function(){
 		trackFactory.addTrack({
 			title: $scope.newTrack.title, 
 			artist: $scope.newTrack.artist, 
@@ -90,11 +120,7 @@ topic5.controller("addNewTrackController", function($scope, trackFactory){
 
 });
 
-topic5.controller("trackDetailsController", ["$scope", function($scope){
 
-
-
-}]);
 
 
 /*
@@ -117,4 +143,16 @@ HTML
     <div ng-include=" 'addTrack.html' "></div>
   	<div ng-include=" 'trackList.html' "></div>
     <div ng-include=" 'trackDetails.html' "></div>
+
+
+
+
+
+    	factory.getSelectedTrack = function(title){
+		for(i = 0; i < tracks.length; i++){
+			if(tracks[i].title == title){
+				return tracks[i];
+			}
+		}
+	};
 */
