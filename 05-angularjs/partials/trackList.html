@@ -1,0 +1,10 @@
+<h1>Track List</h1>
+<ul>
+	<li ng-repeat = "track in tracks"> {{ track.title }}
+		<button ng-click="viewDetail">Show Details</button>
+	</li>
+</ul>
+
+<a ui-sref="home.addTrack">Add Track</a>
+
+<div ui-view></div>
