@@ -3,7 +3,7 @@
 	<li ng-repeat = "track in tracks"> {{ track.title }}
 		<a ui-sref="home.trackDetails"><button ng-click="viewDetail(track)">Show Details</button></a>
 		<a href=""><button ng-click="editTrack(track)">Edit</button></a>
-		<a href="home.editTrack"><button ng-click="deleteTrack(track)">Delete</button></a>	
+		<button ng-click="deleteTrack(track)">Delete</button>	
 	</li>
 </ul>
 
