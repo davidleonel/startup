@@ -13,8 +13,8 @@ console.log(droid.get('artist').recognice()); //console: Jordan Suckley has the 
 
 showAwards = function () {
     var $content = $(".content");
-    var $a = droid.get("artist").recognice();
-    $content.append($a);  
+    var a = droid.get("artist").recognice();
+    $content.append(a);  
 };
 
 $(document).on("ready", showAwards);

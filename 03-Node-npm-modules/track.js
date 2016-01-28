@@ -8,12 +8,10 @@ var Track = function (title, artist, duration, artists){
 };
 	
 Track.prototype.set = function(attr, value){
-	var temp = attr;
-	this[temp] = value;
+	this[attr] = value;
 };
 Track.prototype.get = function(attr){
-	var temp = attr;	
-	return this[temp];
+	return this[attr];
 };
 	
 module.exports = Track;

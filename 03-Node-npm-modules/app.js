@@ -6,16 +6,15 @@ var Artist = function(name, awards){
 
 Artist.prototype.recognice = function(){
 	var msg = this.name + " has the following awards: ";
-	for(i = 0; i < this.awards.length; i++){
+	
+	for(var i = 0; i < this.awards.length; i++){
 		msg += this.awards[i] + ' ';
 	};
     return msg;
 };
 
 Artist.prototype.set = function (attr, value) {
-    var temp = attr;
-	this[temp] = value;
-	
+	this[attr] = value;
 };
 
 module.exports = Artist;
@@ -31,12 +30,10 @@ var Track = function (title, artist, duration, artists){
 };
 	
 Track.prototype.set = function(attr, value){
-	var temp = attr;
-	this[temp] = value;
+	this[attr] = value;
 };
 Track.prototype.get = function(attr){
-	var temp = attr;	
-	return this[temp];
+	return this[attr];
 };
 	
 module.exports = Track;
@@ -57,8 +54,8 @@ console.log(droid.get('artist').recognice()); //console: Jordan Suckley has the 
 
 showAwards = function () {
     var $content = $(".content");
-    var $a = droid.get("artist").recognice();
-    $content.append($a);  
+    var a = droid.get("artist").recognice();
+    $content.append(a);  
 };
 
 $(document).on("ready", showAwards);
@@ -9897,4 +9894,6 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}]},{},[3]);
+},{}],6:[function(require,module,exports){
+arguments[4][2][0].apply(exports,arguments)
+},{"./artist":4,"dup":2}]},{},[4,6,3]);
