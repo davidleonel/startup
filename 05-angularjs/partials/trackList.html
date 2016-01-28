@@ -1,8 +1,11 @@
 <h1>Track List</h1>
 <ul>
 	<li ng-repeat = "track in tracks"> {{ track.title }}
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<a ui-sref="home.trackDetails"><button ng-click="viewDetail(track)">Show Details</button></a>
-		<a href=""><button ng-click="editTrack(track)">Edit</button></a>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a ui-sref="home.editTrack"><button ng-click="editTrack(track)">Edit</button></a>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<button ng-click="deleteTrack(track)">Delete</button>	
 	</li>
 </ul>
