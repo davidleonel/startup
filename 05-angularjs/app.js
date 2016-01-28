@@ -37,7 +37,7 @@ topic5.config(function ($urlRouterProvider,$stateProvider){
 
 //---------------------FACTORY------------------------
 //topic5.service("trackService", function(){
-topic5.factory("trackFactory", function(){
+topic5.service("trackService", function(){
 	var tracks = [
 		{title: "Californication", artist: "Red Hot Chili Peppers", duration:"3:20"},
 		{title: "Reptilia", artist: "The Strokes", duration:"3:00"},
@@ -45,17 +45,17 @@ topic5.factory("trackFactory", function(){
 		{title: "By the Way", artist: "Red Hot Chili Peppers", duration:"3:45"}
 	];
 
-	var factory = {};
+	//var factory = {};
 	var sTrack= null;
 	
-	factory.getTracks = function(){
+	this.getTracks = function(){
 		return tracks;
 	};
 
-	factory.addTrack = function(newTrack){
+	this.addTrack = function(newTrack){
 		tracks.push(newTrack)
 	};
-	factory.deleteTrack = function(selectedTrack){
+	this.deleteTrack = function(selectedTrack){
 		for(var i =0; i < tracks.length; i++) {
     		if(tracks[i] === selectedTrack) {
        			tracks.splice(i, 1);
@@ -65,7 +65,7 @@ topic5.factory("trackFactory", function(){
 
 	//selectedTrack is the track that the user wishes to edit
 	//editedTrack is the new info
-	factory.editTrack = function(selectedTrack, editedTrack){
+	this.editTrack = function(selectedTrack, editedTrack){
 		
 		for(var i =0; i < tracks.length; i++) {
     		if(tracks[i] === selectedTrack) {
@@ -77,14 +77,14 @@ topic5.factory("trackFactory", function(){
 	};
 
 	//these two method are for passing the selected track, for viewing details
-	factory.setSelectedTrack = function(selectedTrack){
+	this.setSelectedTrack = function(selectedTrack){
 		sTrack = selectedTrack;
 	};
-	factory.getSelectedTrack = function(){
+	this.getSelectedTrack = function(){
 		return sTrack;
 	};
 
-	return factory;
+	//return factory;
 });
 
 
@@ -94,32 +94,32 @@ topic5.factory("trackFactory", function(){
 //topic5.controller("trackController", function($scope, trackFactory){
 // and									VVVV
 //topic5.controller("trackController", ["$scope", function($scope){
-topic5.controller("trackController", function($scope, trackFactory){
+topic5.controller("trackController", function($scope, trackService){
 	
-	$scope.tracks = trackFactory.getTracks();
+	$scope.tracks = trackService.getTracks();
 
 	$scope.viewDetail = function (selectedTrack){
-		trackFactory.setSelectedTrack(selectedTrack);
+		trackService.setSelectedTrack(selectedTrack);
 	};
 	$scope.editTrack = function(selectedTrack){
-		trackFactory.setSelectedTrack(selectedTrack);
+		trackService.setSelectedTrack(selectedTrack);
 	};
 	$scope.deleteTrack = function(selectedTrack){
-		trackFactory.deleteTrack(selectedTrack);
+		trackService.deleteTrack(selectedTrack);
 	};
 
 });
 
-topic5.controller("trackDetailsController", function($scope, trackFactory){
+topic5.controller("trackDetailsController", function($scope, trackService){
 	
-	$scope.selectedTrack = trackFactory.getSelectedTrack();
+	$scope.selectedTrack = trackService.getSelectedTrack();
 
 });
 
-topic5.controller("addNewTrackController", function($scope, trackFactory){
+topic5.controller("addNewTrackController", function($scope, trackService){
 
 	$scope.addNewTrack = function(){
-		trackFactory.addTrack({
+		trackService.addTrack({
 			title: $scope.newTrack.title, 
 			artist: $scope.newTrack.artist, 
 			duration: $scope.newTrack.duration 
@@ -128,17 +128,17 @@ topic5.controller("addNewTrackController", function($scope, trackFactory){
 
 });
 
-topic5.controller("editTrackController", function($scope, trackFactory){
+topic5.controller("editTrackController", function($scope, trackService){
 
-	$scope.selectedTrack = trackFactory.getSelectedTrack();
+	$scope.selectedTrack = trackService.getSelectedTrack();
 	
 	$scope.editSelectedTrack = function(){
-		trackFactory.editTrack($scope.selectedTrack,{
+		trackService.editTrack($scope.selectedTrack,{
 			title: $scope.editedTitle, 
 			artist: $scope.editedArtist, 
 			duration: $scope.editedDuration
 		});
-	trackFactory.deleteTrack($scope.selectedTrack);
+	trackService.deleteTrack($scope.selectedTrack);
 
 		$scope.editedTitle=""; 
 		$scope.editedArtist=""; 
