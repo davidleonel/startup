@@ -1,6 +1,6 @@
 var topic5 = angular.module("topic5", ['ui.router']);
 
-
+//OAuth.initialize('your_app_public_key');
 //---------------------VIEWS USING UI-ROUTER------------------------
 
 topic5.config(function ($urlRouterProvider,$stateProvider){
