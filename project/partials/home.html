@@ -1,7 +1,7 @@
 
 <!-- ******************TOP SEARCHBAR************************ -->
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -22,36 +22,17 @@
 	  </div>
 	</form>
     <ul class="nav navbar-nav">
-        <li><a href="#" ng-click="login()">Login</a></li>
+        <li><a ui-sref="home.loginCallback" ng-click="login()">Login</a></li>
     </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 
 </nav>
 
-<!-- ****************************************** -->
+<!-- ***********CREATE PLAYLIST**************** -->
 
-<div class="row">
-  <div class="col-lg-1">
-    <div class="input-group">
-      <span class="input-group-addon">
-        <input type="checkbox" ng-model="trackPrivacy">
-      </span>
-      <span class="input-group-addon">Public</span>
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-1 -->
-</div><!-- /.row -->
 
-<div class="row">
-  <div class="col-lg-3">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="New PLaylist Name" ng-model="newPlaylistName">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="createNewPlaylist(newPlaylistName, trackPrivacy)">Create Playlist!</button>
-      </span>
-    </div><!-- /input-group -->
-  </div><!-- /.col-lg-3 -->
-</div><!-- /.row -->
+
 
 
 <div ui-view></div> 

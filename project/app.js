@@ -1,5 +1,5 @@
 var project=angular.module("project", ['ui.router', 'angularUtils.directives.dirPagination']);
-
+OAuth.initialize('z3ycEkszMlMUbJVTEA9BSNjJrao');
 //---------------------VIEWS USING UI-ROUTER------------------------
 
 project.config(function ($urlRouterProvider,$stateProvider){
@@ -27,61 +27,81 @@ project.config(function ($urlRouterProvider,$stateProvider){
 	
 });
 
-
-//---------------------CONTROLLERS------------------------
-project.controller("homeController", function($scope, $http, $log){
+//---------------------SERVICE------------------------
+project.service("trackService", function(){
 	
+	//-------------------------------------------
+	var accessToken = "";
+	this.setAccessToken = function(token){
+		accessToken = token;
+	};
+	this.getAccessToken = function(){
+		return accessToken;
+	};
+
+	//-------------------------------------------
+	var userId = "";
+	this.setUserID = function(id){
+		userId = id;
+	};
+	this.getUserID = function(){
+		return userId;
+	};
+		//-------------------------------------------
+	var imageURL = "";
+	this.setImageURL = function(url){
+		imageURL = token;
+	};
+	this.getImageURL = function(){
+		return imageURL;
+	};
+
+
+});
+//---------------------CONTROLLERS------------------------
+project.controller("homeController", function($scope, $http, $log, trackService){
+
 	//--------------LOGIN USING OAUTH------------------------
 	$scope.login = function(callback) {
-		OAuth.initialize('z3ycEkszMlMUbJVTEA9BSNjJrao');
+
 		OAuth.popup('spotify').done(function(result) {
 			//RESULTS from the Oauth
 		    console.log(result);
-		    $scope.access_token = result.access_token;
+
+		    trackService.setAccessToken(result.access_token);
+
 		    //TO GET ALL THE INFO OF THE USER
 		    result.me().done(function(data) {
 		    	//Data = info from the User
 		    	console.log(data);
-		    	$scope.userId = data.id;
-
-			}).redirect('/');    
+		    	trackService.setUserID(data.id);
+			});    
 		});
 
 		var spotify = OAuth.create('spotify');
 		//`spotify` is a request object.
 		//`spotify` can be `null` if the request object has not been created yet
-
 	};
+
 
 
 	//-----------------SEARCH FOR SONGS----------------------
 
 	//FALTA SABER COMO MANDARL LA VARIABLE EN EL STRING VVV
-	var config = {
-        headers: {'Authorization': 'Bearer ' + $scope.access_token +'' }
-		};
-
 	$scope.search = function(){
-		$http.get("https://api.spotify.com/v1/search?q=" + $scope.toSearch + "&type=track").then(function(response) {
+		$http.get("https://api.spotify.com/v1/search?q=" + $scope.toSearch + "&type=track&limit=50").then(function(response) {
 	        $scope.searchResult = response.data;
 	        console.log(response);
 	        if(response.data){	
 	        	$scope.searchResults = response.data.tracks.items;
 	        	console.log($scope.searchResults);
-
-	                // var len = response.data.tracks.items.length;
-	                // if(len > 0){
-	                //     for(var i=0;i<len;i++){	      
-	                //         $(".tracks").append('<li class="list-group-item"><div class="row"><div class="col-lg-6"><div class="input-group"<span class="input-group-addon"><input type="checkbox"></span> Track Name: '+response.data.tracks.items[i].name+'</div></div></div></li>');
-	                //     }
-	                // }
-	              //$('.tracks').fadeIn("slow");
             };
 
 	    });
-
 	};
 	
+
+
 	//------------ADD SELECTED SONGS TO NEW ARRAY------------
 	var tracksToPlaylist = [];
 	//this method is called on everytime the state of the checkbox in changed
@@ -102,37 +122,23 @@ project.controller("homeController", function($scope, $http, $log){
 	};
 
 
-	//-----------------USED FOR PAGINATION-----------------
-	$scope.totalItems = 64;
-	$scope.currentPage = 4;
-
-	$scope.setPage = function (pageNo) {
-	$scope.currentPage = pageNo;
-	};
-
-	$scope.pageChanged = function() {
-	  $log.log('Page changed to: ' + $scope.currentPage);
-	};
-
-	$scope.maxSize = 5;
-	$scope.bigTotalItems = 175;
-	$scope.bigCurrentPage = 1;
-
-
-
 	//-----------------CREATE PLAYLIST-----------------
 	//ACA SE VAN A USER newPlaylistName y trackPrivacy que las saco de la vista con ng-model
-
-	var newPlaylistConfig = {
-			data: {'name': $scope.newPlaylistName,
-					'public': $scope.trackPrivacy},
-        	headers: {'Authorization': 'Bearer ' + $scope.access_token +'',
-        				'Content-Type': 'application/json' }
-		};
+ 	
 	$scope.createNewPlaylist = function(){
-		$http.post("https://api.spotify.com/v1/users/" + $scope.userId + "/playlists",newPlaylistConfig).then(function(response) {
-	        console.log(response);
+		var auth = "Bearer " + trackService.getAccessToken();
+ 		var newPlaylistConfig = {
+			data: {"name": $scope.newPlaylistName,
+					"public": $scope.trackPrivacy},
+        	headers: {"Authorization": auth,
+        				"Content-Type": "application/json"  }
+		};
+
+		$http.post("https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists", newPlaylistConfig).then(function(response) {
+			console.log("IT WORKED!!")
 		});
+
+	
 	};	
 
 	//-------------ADD TRACK TO PLAYLIST----------------

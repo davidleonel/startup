@@ -1,0 +1,24 @@
+body{
+	background-color: #003333;
+	margin-right: auto;
+	margin-left: auto;
+
+}
+table{
+	background-color: white;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #007777;
+}
+.selected {
+  background-color:#005555;
+  color:white;
+  font-weight:bold;
+}
+
+.well{
+	margin-right: auto;
+	margin-left: auto;
+	width: 70%;
+}
