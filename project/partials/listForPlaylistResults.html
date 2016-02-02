@@ -1,10 +1,18 @@
 
 <div class="well">
-
-	<p class="lead">Search Results!</p>
+	<div class="row">
+    	<div class="col-lg-5">
+			<div class="form-group">
+				<p class="lead">Select songs to add to the new Playlist!
+    				<input type="text"  class="form-control" ng-model="toSearch" ng-change="search()" placeholder="Search...">
+    			</p>
+    		</div>
+    	</div>
+    </div>
 	<table class= "table table-hover" arrow-selector>
 		<thead>
 			<tr>
+				<th>Selected</th>
 				<th>Artist</th>
 				<th>Name</th>
 				<th>Album</th>
@@ -12,7 +20,10 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr dir-paginate = "track in searchResults| itemsPerPage: 10">
+			<!-- ng-class is to set the CSS class, here we set each track to class selected only if $index == selectedRow -->
+			<!-- with the ng-click we set the selectedRow variable equal to the $index -->
+			<tr dir-paginate = "track in searchResults| itemsPerPage: 10" ng-class="{'selected':track.selected == true}">
+		        <td><input type="checkbox" ng-model="track.selected" ng-change="selectTrack(track)"></td>
 				<td>{{track.artists[0].name}}</td>
 				<td>{{track.name}}</td>
 				<td>{{track.album.name}}</td>
@@ -21,11 +32,13 @@
 		</tbody>
 	</table>
 
-		<dir-pagination-controls
-			max-size="5"
-			direction-links"true"
-			boundary-links="true">
-		</dir-pagination-controls>
+	<dir-pagination-controls
+		max-size="5"
+		direction-links"true"
+		boundary-links="true">
+	</dir-pagination-controls>
+
+	<button type="button" class="btn btn-default pull-right RbtnMargin">Add Songs</button>
 </div>
 
 <!-- 			<th></th>
