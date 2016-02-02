@@ -1,4 +1,5 @@
-var project=angular.module("project", ['ui.router', 'angularUtils.directives.dirPagination']);
+var project=angular.module("project", ['ui.router', 'angularUtils.directives.dirPagination', 'ngStorage']);
+
 OAuth.initialize('z3ycEkszMlMUbJVTEA9BSNjJrao');
 //---------------------VIEWS USING UI-ROUTER------------------------
 
@@ -53,19 +54,19 @@ project.service("trackService", function(){
 	this.getUserID = function(){
 		return userId;
 	};
-		//-------------------------------------------
-	var imageURL = "";
-	this.setImageURL = function(url){
-		imageURL = token;
+	//-------------------------------------------
+	var newPlaylistName = "";
+	this.setNewPlaylistName = function(newName){
+		newPlaylistName = newName;
 	};
-	this.getImageURL = function(){
-		return imageURL;
+	this.getNewPlaylistName = function(){
+		return newPlaylistName;
 	};
 
 
 });
 //---------------------CONTROLLERS------------------------
-project.controller("homeController", function($scope, $http, $log, trackService){
+project.controller("homeController", function($scope, $http, $log, $localStorage, trackService){
 
 	//--------------LOGIN USING OAUTH------------------------
 	$scope.login = function(callback) {
@@ -108,7 +109,7 @@ project.controller("homeController", function($scope, $http, $log, trackService)
 	
 
 
-	//------------ADD SELECTED SONGS TO NEW ARRAY------------
+	//------------ADD SELECTED SONGS TO NEW ARRAY TO CREATE THE NEW PLAYLIST------------
 	var tracksToPlaylist = [];
 	//this method is called on everytime the state of the checkbox in changed
 	$scope.selectTrack = function(track){
@@ -132,22 +133,39 @@ project.controller("homeController", function($scope, $http, $log, trackService)
 	//ACA SE VAN A USER newPlaylistName y trackPrivacy que las saco de la vista con ng-model
  	
 	$scope.createNewPlaylist = function(){
-		var auth = "Bearer " + trackService.getAccessToken();
- 		var newPlaylistConfig = {
-			data: {"name": $scope.newPlaylistName,
-					"public": $scope.trackPrivacy},
-        	headers: {"Authorization": auth,
-        				"Content-Type": "application/json"  }
+
+		if($scope.trackLocal == true){
+			$localStorage.localPlaylist = [];
+			$localStorage.localPlaylist.name = $scope.newPlaylistName;
+			$localStorage.localPlaylist.public = $scope.trackPrivacy;
+
+			console.log($localStorage.localPlaylist);
+
 		};
 
-		$http.post("https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists", newPlaylistConfig).then(function(response) {
-			console.log("IT WORKED!!")
-		});
+		if ($scope.trackLocal == false) {
 
-	
+			var auth = "Bearer " + trackService.getAccessToken();
+	 		var newPlaylistConfig = {
+				data: {"name": $scope.newPlaylistName,
+						"public": $scope.trackPrivacy},
+	        	headers: {"Authorization": auth,
+	        				"Content-Type": "application/json"  }
+			};
+
+			$http.post("https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists", newPlaylistConfig).then(function(response) {
+				console.log("IT WORKED!!")
+			});
+		};
 	};	
 
 	//-------------ADD TRACK TO PLAYLIST----------------
+
+	$scope.addTracksToPlaylist = function(){
+		if ($scope.trackLocal == true) {
+			$localStorage.localPlaylist.trackList = tracksToPlaylist;
+			console.log($localStorage.localPlaylist);
+		};
 	//se va a usar la lista de tracks seleccionadas tracksToPlaylist
 	// $scope.addTracksToPlaylist = function(){
 	// 	$http.post("https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks").then(function(response) {
@@ -165,7 +183,7 @@ project.controller("homeController", function($scope, $http, $log, trackService)
 				
 	// 	});
 	// };
-
+	};
 });
 
 project.controller("loginCallbackController", function($scope, $http, $log){
