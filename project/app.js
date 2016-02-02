@@ -11,25 +11,21 @@ project.config(function ($urlRouterProvider,$stateProvider){
 		templateUrl:"partials/home.html",
 		controller:"homeController"
 	})
-
 	.state("home.listResults",{
 		url: "/listResults",
 		templateUrl:"partials/listResults.html",
 		controller:"homeController"
 	})
-
+	.state("home.createNewPlaylist",{
+		url: "/createNewPlaylist",
+		templateUrl:"partials/createNewPlaylist.html",
+		controller:"createPlaylistController"
+	})
 	.state("home.createNewPlaylist.listForPlaylistResults",{
 		url: "/listForPlaylistResults",
 		templateUrl:"partials/listForPlaylistResults.html",
 		controller:"homeController"
-	})
-
-	.state("home.createNewPlaylist",{
-		url: "/createNewPlaylist",
-		templateUrl:"partials/createNewPlaylist.html",
-		controller:"homeController"
 	});
-
 	$urlRouterProvider.otherwise("/");
 	
 });
@@ -62,11 +58,9 @@ project.service("trackService", function(){
 	this.getNewPlaylistName = function(){
 		return newPlaylistName;
 	};
-
-
 });
 //---------------------CONTROLLERS------------------------
-project.controller("homeController", function($scope, $http, $log, $localStorage, trackService){
+project.controller("homeController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
 
 	//--------------LOGIN USING OAUTH------------------------
 	$scope.login = function(callback) {
@@ -89,12 +83,7 @@ project.controller("homeController", function($scope, $http, $log, $localStorage
 		//`spotify` is a request object.
 		//`spotify` can be `null` if the request object has not been created yet
 	};
-
-
-
 	//-----------------SEARCH FOR SONGS----------------------
-
-	//FALTA SABER COMO MANDARL LA VARIABLE EN EL STRING VVV
 	$scope.search = function(){
 		$http.get("https://api.spotify.com/v1/search?q=" + $scope.toSearch + "&type=track&limit=50").then(function(response) {
 	        $scope.searchResult = response.data;
@@ -105,12 +94,38 @@ project.controller("homeController", function($scope, $http, $log, $localStorage
             };
 
 	    });
-	};
-	
+	};	
+}]);
 
+project.controller("createPlaylistController", ['$scope', '$http', '$localStorage', 'trackService', function($scope, $http, $localStorage, trackService){
 
-	//------------ADD SELECTED SONGS TO NEW ARRAY TO CREATE THE NEW PLAYLIST------------
 	var tracksToPlaylist = [];
+	$scope.trackLocal = false;
+	$scope.trackPrivacy = false;
+
+	//-----------------CREATE PLAYLIST-----------------
+	$scope.createNewPlaylist = function(){
+		if($scope.trackLocal == true){
+			$localStorage.localPlaylist = [];
+			$localStorage.localPlaylist.name = $scope.newPlaylistName;
+			$localStorage.localPlaylist.public = $scope.trackPrivacy;
+			console.log($localStorage.localPlaylist);
+		};
+		if ($scope.trackLocal == false) {
+			var auth = "Bearer " + trackService.getAccessToken();
+	 		var newPlaylistConfig = {
+				data: {"name": $scope.newPlaylistName,
+						"public": $scope.trackPrivacy},
+	        	headers: {"Authorization": auth,
+	        				"Content-Type": "application/json"  }
+			};
+			$http.post("https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists", newPlaylistConfig).then(function(response) {
+				console.log("IT WORKED!!")
+			});
+		};
+	};	
+	//------------ADD SELECTED SONGS TO NEW ARRAY TO CREATE THE NEW PLAYLIST------------
+
 	//this method is called on everytime the state of the checkbox in changed
 	$scope.selectTrack = function(track){
 		//here it checkes if the checkbox value is true then the track is added to the list
@@ -127,45 +142,13 @@ project.controller("homeController", function($scope, $http, $log, $localStorage
 		};
 		console.log(tracksToPlaylist);
 	};
-
-
-	//-----------------CREATE PLAYLIST-----------------
-	//ACA SE VAN A USER newPlaylistName y trackPrivacy que las saco de la vista con ng-model
- 	
-	$scope.createNewPlaylist = function(){
-
-		if($scope.trackLocal == true){
-			$localStorage.localPlaylist = [];
-			$localStorage.localPlaylist.name = $scope.newPlaylistName;
-			$localStorage.localPlaylist.public = $scope.trackPrivacy;
-
-			console.log($localStorage.localPlaylist);
-
-		};
-
-		if ($scope.trackLocal == false) {
-
-			var auth = "Bearer " + trackService.getAccessToken();
-	 		var newPlaylistConfig = {
-				data: {"name": $scope.newPlaylistName,
-						"public": $scope.trackPrivacy},
-	        	headers: {"Authorization": auth,
-	        				"Content-Type": "application/json"  }
-			};
-
-			$http.post("https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists", newPlaylistConfig).then(function(response) {
-				console.log("IT WORKED!!")
-			});
-		};
-	};	
-
 	//-------------ADD TRACK TO PLAYLIST----------------
-
 	$scope.addTracksToPlaylist = function(){
 		if ($scope.trackLocal == true) {
 			$localStorage.localPlaylist.trackList = tracksToPlaylist;
 			console.log($localStorage.localPlaylist);
 		};
+
 	//se va a usar la lista de tracks seleccionadas tracksToPlaylist
 	// $scope.addTracksToPlaylist = function(){
 	// 	$http.post("https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks").then(function(response) {
@@ -184,8 +167,5 @@ project.controller("homeController", function($scope, $http, $log, $localStorage
 	// 	});
 	// };
 	};
-});
 
-project.controller("loginCallbackController", function($scope, $http, $log){
-	res.redirect('/');
-});
+}]);
