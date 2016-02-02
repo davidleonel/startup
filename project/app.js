@@ -17,9 +17,15 @@ project.config(function ($urlRouterProvider,$stateProvider){
 		controller:"homeController"
 	})
 
-	.state("home.loginCallback",{
-		url: "/loginCallback",
-		templateUrl:"partials/loginCallback.html",
+	.state("home.createNewPlaylist.listForPlaylistResults",{
+		url: "/listForPlaylistResults",
+		templateUrl:"partials/listForPlaylistResults.html",
+		controller:"homeController"
+	})
+
+	.state("home.createNewPlaylist",{
+		url: "/createNewPlaylist",
+		templateUrl:"partials/createNewPlaylist.html",
 		controller:"homeController"
 	});
 
