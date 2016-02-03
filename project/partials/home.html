@@ -36,8 +36,8 @@
     <ul class="sidebar-nav" id="sidebar">
       <li><a ng-click="login()">Login</a></li>     
       <li><a ui-sref="home.createNewPlaylist">Create New Playlist</a></li>
-      <li><a>My Playlist</a></li>
-      <li><a>Logout</a></li>
+      <li ng-controller="viewMyPlaylistsController"><a ui-sref="home.viewMyPlaylists" ng-click="getMyPlaylists()">My Playlist</a></li>
+      <li><a ng-click="logOut()">Logout</a></li>
     </ul>
   </div>
       
