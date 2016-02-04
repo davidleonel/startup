@@ -33,12 +33,13 @@
 	</table>
 
 	<dir-pagination-controls
-		max-size="5"
+		max-size="5" 
+		ng-show="show"
 		direction-links"true"
 		boundary-links="true">
 	</dir-pagination-controls>
 
-	<button type="button" class="btn btn-default pull-right RbtnMargin" ng-click="addTracksToPlaylist()" >Add Songs</button>
+	<button type="button" class="btn btn-default pull-right RbtnMargin" ng-click="addTracksToPlaylist()" ng-show="show" >Add Songs</button>
 </div>
 
 <!-- 			<th></th>

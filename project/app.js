@@ -2,10 +2,11 @@ var project=angular.module("project", ['ui.router', 'angularUtils.directives.dir
 
 OAuth.initialize('z3ycEkszMlMUbJVTEA9BSNjJrao');
 //---------------------VIEWS USING UI-ROUTER------------------------
-
 project.config(function ($urlRouterProvider,$stateProvider){
 	$stateProvider
 	//this is the view that is going to appear when you first open up the page
+	//and dependeing on the links that you click on within the home page 
+	//the other views will open
 	.state("home",{
 		url: "/",
 		templateUrl:"partials/home.html",
@@ -32,12 +33,11 @@ project.config(function ($urlRouterProvider,$stateProvider){
 		controller:"viewMyPlaylistsController"
 	});
 	$urlRouterProvider.otherwise("/");
-	
 });
 
 //---------------------SERVICE------------------------
 project.service("trackService", function(){
-	//-------------------------------------------
+	//-----------ACCESS TOKEN-----------------------------------------------
 	var accessToken = "";
 	this.setAccessToken = function(token){
 		accessToken = token;
@@ -45,7 +45,7 @@ project.service("trackService", function(){
 	this.getAccessToken = function(){
 		return accessToken;
 	};
-	//-------------------------------------------
+	//-----------CURRENT USERS ID-------------------------------------------
 	var userId = "";
 	this.setUserID = function(id){
 		userId = id;
@@ -53,7 +53,7 @@ project.service("trackService", function(){
 	this.getUserID = function(){
 		return userId;
 	};
-		//-------------------------------------------
+	//-----------CURRENT USER OBJECT----------------------------------------
 	var currentUser = [];
 	this.setUser = function(user){
 		currentUser = user;
@@ -61,7 +61,15 @@ project.service("trackService", function(){
 	this.getUser = function(){
 		return currentUser;
 	};
-	//-------------------------------------------
+	//-----------USED TO SEE IF THE USER IS LOGGED IN OR NOT-----------------
+	var loggedIn = false;
+	this.setLoggedIn = function(logged){
+		loggedIn = logged;
+	};
+	this.getLoggedIn = function(){
+		return loggedIn;
+	};
+	//-----------THE NAME OF THE NEW PLAYLIST THAT IS ABOUT TO BE CREATED----
 	var newPlaylistName = "";
 	this.setNewPlaylistName = function(newName){
 		newPlaylistName = newName;
@@ -69,7 +77,7 @@ project.service("trackService", function(){
 	this.getNewPlaylistName = function(){
 		return newPlaylistName;
 	};
-	//-------------------------------------------
+	//----------THE CURRENT USERS PLAYLIST-----------------------------------
 	var currentUserPlaylists = [];
 	this.setCurrentUserPlaylists = function(playlists){
 		currentUserPlaylists = playlists;
@@ -77,32 +85,48 @@ project.service("trackService", function(){
 	this.getCurrentUserPlaylists = function(){
 		return currentUserPlaylists;
 	};
+	//-----------THE NEW PLAYLIST OBJECT-------------------------------------
+	var newPlaylist = [];
+	this.setNewPlaylist = function(playlist){
+		newPlaylist = playlist;
+	};
+	this.getNewPlaylist = function(){
+		return newPlaylist;
+	};
 });
+
 //---------------------CONTROLLERS------------------------
 project.controller("homeController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
-
+	$scope.showloggedIn = false;
 	//--------------LOGIN USING OAUTH------------------------
-	$scope.login = function(callback) {
+	$scope.login = function() {
 
 		OAuth.popup('spotify').done(function(result) {
 			//RESULTS from the Oauth
 		    console.log(result);
-
 		    trackService.setAccessToken(result.access_token);
-
 		    //TO GET ALL THE INFO OF THE USER
 		    result.me().done(function(data) {
 		    	//Data = info from the User
 		    	console.log(data);
 		    	trackService.setUserID(data.id);
 		    	trackService.setUser(data);
+		    	if(data){$scope.showloggedIn = true;};
+		    	if(!data){$scope.showloggedIn = false;}	    	
 			});    
 		});
 
-		var spotify = OAuth.create('spotify');
-		//`spotify` is a request object.
-		//`spotify` can be `null` if the request object has not been created yet
 	};
+
+	// $scope.isLoggedIn = function(id){
+	// 	console.log("checkea");
+	// 	if (id != "") {
+	// 		trackService.setLoggedIn(true);
+	// 		$scope.loggedIn = trackService.getLoggedIn();
+	// 		console.log($scope.loggedIn);
+
+	// 	};
+	// };
 
 	$scope.logOut = function(){
 		// var user = trackService.getUser();
@@ -111,6 +135,7 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 		// });
 	};
 	//-----------------SEARCH FOR SONGS----------------------
+	$scope.show = false;
 	$scope.search = function(){
 		$http.get("https://api.spotify.com/v1/search?q=" + $scope.toSearch + "&type=track&limit=50").then(function(response) {
 	        $scope.searchResult = response.data;
@@ -118,7 +143,9 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 	        if(response.data){	
 	        	$scope.searchResults = response.data.tracks.items;
 	        	console.log($scope.searchResults);
+	        	$scope.show = true;
             };
+            if (!response.data){$scope.show = false;};
 
 	    });
 	};	
@@ -127,43 +154,45 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 project.controller("createPlaylistController", ['$scope', '$http', '$localStorage', 'trackService', function($scope, $http, $localStorage, trackService){
 
 	var tracksToPlaylist = [];
-	$scope.trackLocal = false;
+
 	$scope.trackPrivacy = false;
 
 	//-----------------CREATE PLAYLIST-----------------
 	$scope.createNewPlaylist = function(){
-		if($scope.trackLocal == true){
-			$localStorage.localPlaylist = [];
-			$localStorage.localPlaylist.name = $scope.newPlaylistName;
-			$localStorage.localPlaylist.public = $scope.trackPrivacy;
-			console.log($localStorage.localPlaylist);
-		};
-		if ($scope.trackLocal == false) {
-			
-			$.ajax({
-	        url: "https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists",
-	        body: JSON.stringify({
-	             'name': $scope.newPlaylistName,
-	             'public': $scope.trackPrivacy
-	         }),
-	        dataType:'json',
-	        type: 'post',
-	        headers: {
-	            'Authorization': 'Bearer ' + trackService.getAccessToken(),
-	            'Content-Type': 'application/json',
-	        },
-	        success: function(data) {
-	        	console.log("OK");
-      		},
-		    error: function(data) {
-		      console.log("ko");
-		    }
-	     	}).done(function (data) {
-    			console.log("DONE");
-    		});    
-		};
+
+		//*******************CREATE THE NEW PLAYLIST LOCALLY**************************
+		$localStorage.localPlaylist = [];
+		$localStorage.localPlaylist.name = $scope.newPlaylistName;
+		$localStorage.localPlaylist.public = $scope.trackPrivacy;
+		console.log($localStorage.localPlaylist);
+
+		//*******************CREATE THE NEW PLAYLIST ON SPOTIFY**************************
+		$.ajax({
+        url: "https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists",
+        data: JSON.stringify({
+             'name': $scope.newPlaylistName,
+             'public': $scope.trackPrivacy
+         }),
+        dataType:'json',
+        type:'post',
+        headers: {
+            'Authorization': 'Bearer ' + trackService.getAccessToken(),
+            'Content-Type': 'application/json',
+        },
+        success: function(data) {
+        	trackService.setNewPlaylist(data);
+        	console.log(trackService.getNewPlaylist());
+  		},
+	    error: function(data) {
+	      console.log("ko");
+	    }
+     	}).done(function (data) {
+			console.log("DONE");
+		});    
 	};	
-	//------------ADD SELECTED SONGS TO NEW ARRAY TO CREATE THE NEW PLAYLIST------------
+
+
+	//------------ADD SELECTED SONGS TO NEW ARRAY TO ADD TO THE NEW PLAYLIST------------
 
 	//this method is called on everytime the state of the checkbox in changed
 	$scope.selectTrack = function(track){
@@ -181,66 +210,58 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
 		};
 		console.log(tracksToPlaylist);
 	};
+
 	//-------------ADD TRACK TO PLAYLIST----------------
 	$scope.addTracksToPlaylist = function(){
-		if ($scope.trackLocal == true) {
-			$localStorage.localPlaylist.trackList = tracksToPlaylist;
-			console.log($localStorage.localPlaylist);
+
+		//*******************ADD THE SONGS TO THE LOCAL PLAYLIST**************************
+		$localStorage.localPlaylist.trackList = tracksToPlaylist;
+		console.log($localStorage.localPlaylist);
+
+		$scope.getSelectedTracksURIS = function(tracks){
+			var uriList = [];
+			for (var index = 0; index < tracks.length; index++) {
+					uriList.push(tracks[index].uri);
+			};
+			return uriList;
 		};
-		if ($scope.trackLocal == false) {
-			$.ajax({
-	        url: "https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists/{playlist_id}/tracks",
-	        body: JSON.stringify({
-	             'name': $scope.newPlaylistName,
-	             'public': $scope.trackPrivacy
-	         }),
-	        dataType:'json',
-	        type: 'post',
-	        headers: {
-	            'Authorization': 'Bearer ' + trackService.getAccessToken(),
-	            'Content-Type': 'application/json',
-	        },
-	        success: function(data) {
-	        	console.log("OK");
-      		},
-		    error: function(data) {
-		      console.log("ko");
-		    }
-	     	}).done(function (data) {
-    			console.log("DONE");
-    		});
-    	};    		
+		var uriList = $scope.getSelectedTracksURIS(tracksToPlaylist);
+		console.log(uriList);
 
-	//se va a usar la lista de tracks seleccionadas tracksToPlaylist
-	// $scope.addTracksToPlaylist = function(){
-	// 	$http.post("https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks").then(function(response) {
-	//         $scope.myWelcome = response.data;
-	// 	});
-	// };
+		//*******************ADD THE SONGS TO THE SPOTIFY PLAYLIST**************************
+		var newPlaylist = trackService.getNewPlaylist();
+		$.ajax({
+        url: "https://api.spotify.com/v1/users/" + trackService.getUserID() + "/playlists/" + newPlaylist.id + "/tracks",
+        data: JSON.stringify({
+             'uris': uriList
+         }),
+        dataType:'json',
+        type: 'post',
+        headers: {
+            'Authorization': 'Bearer ' + trackService.getAccessToken(),
+            'Content-Type': 'application/json',
+        },
+        success: function(data) {
+        	console.log("TRACKS ADDED TO THE NEW PLAYLIST");
+  		},
+	    error: function(data) {
+	      console.log("k.o");
+	    }
+     	}).done(function (data) {
+			console.log("DONE");
+		});
 
-
-	// $scope.addSongsToPlaylist = function (){
-	// 	$( "li" ).each(function() {
-	// 		//var songToAdd = {name: , artist:};
-	// 		if (document.getelementsbyclassname('selected').checked ) {
-	// 			alert("checked");
-	// 		};
-				
-	// 	});
-	// };
 	};
 }]);
 
 project.controller("viewMyPlaylistsController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
+	
+	//aca falta ver por que carga primero la view antes que los datos
 
 	$scope.getMyPlaylists = function(){
 
 	    $.ajax({
 	        url: 'https://api.spotify.com/v1/me/playlists',
-	        // body: JSON.stringify({
-	        //     'name': name,
-	        //     'public': false
-	        // }),
 	        dataType:'json',
 	        type: 'get',
 	        headers: {
@@ -259,7 +280,4 @@ project.controller("viewMyPlaylistsController", ['$scope', '$http', 'trackServic
     		console.log($scope.currentUserPlaylists);
     	});    
 	};
-
-
-
 }]);
