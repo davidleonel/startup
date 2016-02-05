@@ -1,9 +1,11 @@
 <div class="well">
   <!-- SE CARGA EL VIEW ANTES QUE LOS DATOSW -->
+  <p class="lead">{{currentUserId}}´s playlists: </p>
+  <button type="button" class="btn btn-default pull-right RbtnMargin" ng-click="getMyPlaylists()">Show Playlists</button>
     <ul>My Playlists:</br>
     	<li ng-repeat="playlist in currentUserPlaylists">
-    		Name: {{playlist.name}}
-    		Tracks: {{playlist.tracks.total}}
+    		Name: {{playlist.name}} </br>
+    		Number of Tracks: {{playlist.tracks.total}}
     	</li>
     </ul>
 

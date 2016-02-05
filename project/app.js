@@ -30,7 +30,7 @@ project.config(function ($urlRouterProvider,$stateProvider){
 	.state("home.viewMyPlaylists",{
 		url: "/viewMyPlaylists",
 		templateUrl:"partials/viewMyPlaylists.html",
-		controller:"viewMyPlaylistsController"
+		controller:"homeController"
 	});
 	$urlRouterProvider.otherwise("/");
 });
@@ -98,9 +98,10 @@ project.service("trackService", function(){
 //---------------------CONTROLLERS------------------------
 project.controller("homeController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
 	$scope.showloggedIn = false;
+	$scope.show = false;
+	$scope.currentUserId = trackService.getUserID();
 	//--------------LOGIN USING OAUTH------------------------
 	$scope.login = function() {
-
 		OAuth.popup('spotify').done(function(result) {
 			//RESULTS from the Oauth
 		    console.log(result);
@@ -115,19 +116,7 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 		    	if(!data){$scope.showloggedIn = false;}	    	
 			});    
 		});
-
 	};
-
-	// $scope.isLoggedIn = function(id){
-	// 	console.log("checkea");
-	// 	if (id != "") {
-	// 		trackService.setLoggedIn(true);
-	// 		$scope.loggedIn = trackService.getLoggedIn();
-	// 		console.log($scope.loggedIn);
-
-	// 	};
-	// };
-
 	$scope.logOut = function(){
 		// var user = trackService.getUser();
 		// user.logout().done(function() {
@@ -135,7 +124,6 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 		// });
 	};
 	//-----------------SEARCH FOR SONGS----------------------
-	$scope.show = false;
 	$scope.search = function(){
 		$http.get("https://api.spotify.com/v1/search?q=" + $scope.toSearch + "&type=track&limit=50").then(function(response) {
 	        $scope.searchResult = response.data;
@@ -149,6 +137,26 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 
 	    });
 	};	
+	$scope.getMyPlaylists = function(){
+	    $.ajax({
+	        url: 'https://api.spotify.com/v1/me/playlists',
+	        dataType:'json',
+	        type: 'get',
+	        headers: {
+	            'Authorization': 'Bearer ' + trackService.getAccessToken(),
+	            'Content-Type': 'application/json',
+	        },
+	        success: function(data) {
+        		trackService.setCurrentUserPlaylists(data.items);
+        	},
+		    error: function(data) {
+		      console.log("ko");
+		    }
+	     }).done(function (data) {
+	     	$scope.currentUserPlaylists = trackService.getCurrentUserPlaylists();
+    		console.log($scope.currentUserPlaylists);
+    	});    
+	};
 }]);
 
 project.controller("createPlaylistController", ['$scope', '$http', '$localStorage', 'trackService', function($scope, $http, $localStorage, trackService){
@@ -254,30 +262,34 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
 	};
 }]);
 
-project.controller("viewMyPlaylistsController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
+// project.controller("viewMyPlaylistsController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
 	
-	//aca falta ver por que carga primero la view antes que los datos
+// 	//aca falta ver por que carga primero la view antes que los datos
+// 	$scope.currentUser = trackService.getUserID();
+// 	console.log($scope.currentUser);
 
-	$scope.getMyPlaylists = function(){
+// 	$scope.getMyPlaylists = function(){
 
-	    $.ajax({
-	        url: 'https://api.spotify.com/v1/me/playlists',
-	        dataType:'json',
-	        type: 'get',
-	        headers: {
-	            'Authorization': 'Bearer ' + trackService.getAccessToken(),
-	            'Content-Type': 'application/json',
-	        },
-	        success: function(data) {
-        		trackService.setCurrentUserPlaylists(data.items);
-        		console.log(data);
-      		},
-		    error: function(data) {
-		      console.log("ko");
-		    }
-	     }).done(function (data) {
-    		$scope.currentUserPlaylists = trackService.getCurrentUserPlaylists();
-    		console.log($scope.currentUserPlaylists);
-    	});    
-	};
-}]);
+// 	    $.ajax({
+// 	        url: 'https://api.spotify.com/v1/me/playlists',
+// 	        dataType:'json',
+// 	        type: 'get',
+// 	        headers: {
+// 	            'Authorization': 'Bearer ' + trackService.getAccessToken(),
+// 	            'Content-Type': 'application/json',
+// 	        },
+// 	        success: function(data) {
+//         		trackService.setCurrentUserPlaylists(data.items);
+//         		console.log(data);
+//         		$scope.currentUserPlaylists = trackService.getCurrentUserPlaylists();
+//     			console.log($scope.currentUserPlaylists);
+//       		},
+// 		    error: function(data) {
+// 		      console.log("ko");
+// 		    }
+// 	     }).done(function (data) {
+
+//     	});    
+// 	};
+
+// }]);
