@@ -262,34 +262,3 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
 	};
 }]);
 
-// project.controller("viewMyPlaylistsController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
-	
-// 	//aca falta ver por que carga primero la view antes que los datos
-// 	$scope.currentUser = trackService.getUserID();
-// 	console.log($scope.currentUser);
-
-// 	$scope.getMyPlaylists = function(){
-
-// 	    $.ajax({
-// 	        url: 'https://api.spotify.com/v1/me/playlists',
-// 	        dataType:'json',
-// 	        type: 'get',
-// 	        headers: {
-// 	            'Authorization': 'Bearer ' + trackService.getAccessToken(),
-// 	            'Content-Type': 'application/json',
-// 	        },
-// 	        success: function(data) {
-//         		trackService.setCurrentUserPlaylists(data.items);
-//         		console.log(data);
-//         		$scope.currentUserPlaylists = trackService.getCurrentUserPlaylists();
-//     			console.log($scope.currentUserPlaylists);
-//       		},
-// 		    error: function(data) {
-// 		      console.log("ko");
-// 		    }
-// 	     }).done(function (data) {
-
-//     	});    
-// 	};
-
-// }]);
