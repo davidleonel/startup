@@ -15,13 +15,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'js/angular.min.js',
+      'js/angular.js',
       'js/angular-ui-router.min.js',
       'js/dirPagination.js',
+      'js/ngStorage.min.js',
       'js/angular-mocks.js',
       'js/jquery-2.2.0.min.js',
       'js/oauth.min.js',
       'css/bootstrap-3.3.6-dist/js/bootstrap.min.js',
+      'app.js',
       'test/**/*.js'
               
     ],
