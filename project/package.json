@@ -4,7 +4,7 @@
   "description": "Bootcamp Project",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start karma.conf.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "David Garcia",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "jasmine-core": "^2.2.0",
     "karma": "^0.12.37",
     "karma-chrome-launcher": "^0.1.12",
-    "karma-jasmine": "^0.3.7"
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0"
   }
 }

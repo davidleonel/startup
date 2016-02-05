@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Thu Feb 04 2016 16:58:02 GMT-0300 (Hora estándar de Argentina)
+// Generated on Fri Feb 05 2016 09:52:54 GMT-0300 (Hora estándar de Argentina)
 
 module.exports = function(config) {
   config.set({
@@ -15,7 +15,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'js/angular.min.js',
+      'js/angular-ui-router.min.js',
+      'js/dirPagination.js',
+      'js/angular-mocks.js',
+      'js/jquery-2.2.0.min.js',
+      'js/oauth.min.js',
+      'css/bootstrap-3.3.6-dist/js/bootstrap.min.js',
       'test/**/*.js'
+              
     ],
 
 
