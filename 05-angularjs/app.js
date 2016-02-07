@@ -73,7 +73,7 @@ topic5.service("trackService", function(){
     		}
 		}
 
-		tracks.push(selectedTrack)
+		//tracks.push(selectedTrack)
 	};
 
 	//these two method are for passing the selected track, for viewing details
@@ -138,11 +138,12 @@ topic5.controller("editTrackController", function($scope, trackService){
 			artist: $scope.editedArtist, 
 			duration: $scope.editedDuration
 		});
-	trackService.deleteTrack($scope.selectedTrack);
+		trackService.deleteTrack($scope.selectedTrack);
 
 		$scope.editedTitle=""; 
 		$scope.editedArtist=""; 
 		$scope.editedDuration="";
+		console.log(trackService.getTracks());
 	};
 });
 
