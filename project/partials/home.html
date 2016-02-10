@@ -1,0 +1,69 @@
+
+<!-- ******************TOP SEARCHBAR************************ -->
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Globant Final Project</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    	<form class="navbar-form navbar-left " role="search">
+    	  <div class="form-group">
+    	    <input ui-sref="home.listResults" type="text"  class="form-control" ng-model="toSearch" ng-change="search()" placeholder="Search...">
+    	  </div>
+    	</form>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<!-- ***********SIDE MENU and MAIN CONTENT**************** -->
+<div id="wrapper" class="active">  
+
+  <!-- ***********Sidebar*********** -->
+  <div id="sidebar-wrapper">
+    <ul id="sidebar_menu" class="sidebar-nav">
+         <li class="sidebar-brand"><a id="menu-toggle" href="#"><span id="main_icon" class="glyphicon glyphicon-align-justify"></span>Menu</a></li>
+    </ul>
+    <ul class="sidebar-nav" id="sidebar">
+      <li><a ui-sref="home.userLoggedIn" ng-click="login()" ng-hide="isloggedIn">Login</a></li>     
+      <li><a ui-sref="home.createNewPlaylist" ng-show="showloggedIn">Create New Playlist</a></li>
+      <li><a ui-sref="home.viewMyPlaylists" ng-click="getMyPlaylists()" ng-show="showloggedIn">My Playlist</a></li>
+      <li><a ui-sref="home" ng-click="logOut()" ng-show="showloggedIn">Logout</a></li>
+    </ul>
+  </div>
+      
+  <!-- ***********Main Content**************** -->
+  <div id="page-content-wrapper">
+    <!-- Keep all page content within the page-content inset div! -->
+    <div class="page-content inset">
+      <div class="row">
+          <div class="col-md-12">
+          <p class="well lead">Globant Bootcamp Final Project</p>
+          <!-- **********MAIN VIEW******************** -->
+          <div ui-view></div> 
+          <!-- *************************************** -->
+        </div>
+      </div>
+    </div>
+  </div>
+    
+</div>
+
+
+
+
+<script >
+  $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("active");
+  });
+</script>

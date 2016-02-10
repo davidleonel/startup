@@ -1,0 +1,57 @@
+
+<div class="well">
+	<div class="row">
+    	<div class="col-lg-5">
+			<div class="form-group">
+				<p class="lead">Select songs to add to the new Playlist!
+    				<input type="text"  class="form-control" ng-model="toSearch" ng-change="search()" placeholder="Search...">
+    			</p>
+    		</div>
+    	</div>
+    </div>
+	<table class= "table table-hover" arrow-selector>
+		<thead>
+			<tr>
+				<th>Selected</th>
+				<th>Artist</th>
+				<th>Name</th>
+				<th>Album</th>
+				<th>Duration</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- ng-class is to set the CSS class, here we set each track to class selected only if $index == selectedRow -->
+			<!-- with the ng-click we set the selectedRow variable equal to the $index -->
+			<tr dir-paginate = "track in searchResults| itemsPerPage: 10" ng-class="{'selected':track.selected == true}">
+		        <td><input type="checkbox" ng-model="track.selected" ng-change="selectTrack(track)"></td>
+				<td>{{track.artists[0].name}}</td>
+				<td>{{track.name}}</td>
+				<td>{{track.album.name}}</td>
+				<td>{{track.duration_ms}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<dir-pagination-controls
+		max-size="5" 
+		ng-show="show"
+		direction-links"true"
+		boundary-links="true">
+	</dir-pagination-controls>
+
+	<button type="button" class="btn btn-default pull-right RbtnMargin" ng-click="addTracksToPlaylist()" ng-show="show" >Add Songs</button>
+</div>
+
+<!-- 			<th></th>
+			<th ng-click="sort('album.Name')">Artist
+			<span class="glyphicon sort-icon" ng-show="sortKey=='artist'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
+			<th ng-click="sort('track.name')">Name
+			<span class="glyphicon sort-icon" ng-show="sortKey=='track.name'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
+			<th ng-click="sort('album')">Album
+				<span class="glyphicon sort-icon" ng-show="sortKey=='album'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
+			<th ng-click="sort('duration')">Duration
+			<span class="glyphicon sort-icon" ng-show="sortKey=='duration'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>

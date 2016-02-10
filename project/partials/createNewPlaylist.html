@@ -1,0 +1,31 @@
+
+<div class="well lead">
+  <p class="lead">Create new Playlist!</p>
+  <p>In order to add songs first you must create a playlist.</p>
+  
+  <!-- ********************PUBLIC/PRIVATE********************** -->
+  <div class="row">
+    <div class="col-lg-1">
+      <div class="input-group">
+        <span class="input-group-addon ">
+          <input type="checkbox" ng-model="trackPrivacy">
+        </span>
+        <span class="input-group-addon">Public</span>
+      </div><!-- /input-group -->
+    </div><!-- /.col-lg-1 -->
+  </div><!-- /.row -->
+  <!-- ***********************NAME FIELD/SAVE BUTTON******************** -->
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="input-group ">
+        <input type="text" class="form-control" placeholder="Playlist Name" ng-model="newPlaylistName">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ui-sref="home.createNewPlaylist.listForPlaylistResults" ng-click="createNewPlaylist()">Create Playlist!</button>
+        </span>
+      </div><!-- /input-group -->
+    </div><!-- /.col-lg-3 -->
+  </div><!-- /.row -->
+</div>
+
+
+<div ui-view></div> 

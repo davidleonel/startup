@@ -1,0 +1,12 @@
+<div class="well">
+  <!-- SE CARGA EL VIEW ANTES QUE LOS DATOSW -->
+  <p class="lead">{{currentUserId}}´s playlists: </p>
+
+    <ul>My Playlists:</br>
+    	<li ng-repeat="playlist in currentUserPlaylists">
+    		Name: {{playlist.name}} </br>
+    		Number of Tracks: {{playlist.tracks.total}}
+    	</li>
+    </ul>
+
+</div>

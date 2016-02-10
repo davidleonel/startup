@@ -1,0 +1,43 @@
+
+<div class="well">
+
+	<p class="lead">Search Results!</p>
+	<table class= "table table-hover">
+		<thead>
+			<tr>
+				<th>Artist</th>
+				<th>Name</th>
+				<th>Album</th>
+				<th>Duration</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr dir-paginate = "track in searchResults| itemsPerPage: 10">
+				<td>{{track.artists[0].name}}</td>
+				<td>{{track.name}}</td>
+				<td>{{track.album.name}}</td>
+				<td>{{track.duration_ms}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+		<dir-pagination-controls
+			max-size="5"
+			direction-links"true"
+			boundary-links="true">
+		</dir-pagination-controls>
+</div>
+
+<!-- 			<th></th>
+			<th ng-click="sort('album.Name')">Artist
+			<span class="glyphicon sort-icon" ng-show="sortKey=='artist'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
+			<th ng-click="sort('track.name')">Name
+			<span class="glyphicon sort-icon" ng-show="sortKey=='track.name'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
+			<th ng-click="sort('album')">Album
+				<span class="glyphicon sort-icon" ng-show="sortKey=='album'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
+			<th ng-click="sort('duration')">Duration
+			<span class="glyphicon sort-icon" ng-show="sortKey=='duration'" ng-class="{'glyphicon-chevron-up' :reverse, 'glyphicon-chevron-down' :!reverse}"></span>
+			</th>
