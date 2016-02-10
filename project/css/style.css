@@ -24,9 +24,6 @@ table{
 }
 
 
-
-
-
 .row{
     margin-left:0px;
     margin-right:0px;
@@ -176,3 +173,13 @@ table{
 
 
 .RbtnMargin { margin-left: 5px; }
+
+
+
+.loginImg{
+   display: block;
+    margin-left: 20%;
+    margin-right: auto;
+  width: 20%;
+
+}

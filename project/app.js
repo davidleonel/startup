@@ -12,6 +12,16 @@ project.config(function ($urlRouterProvider,$stateProvider){
 		templateUrl:"partials/home.html",
 		controller:"homeController"
 	})
+	.state("home.opening",{
+		url: "/opening",
+		templateUrl:"partials/opening.html",
+		controller:"homeController"
+	})
+	.state("home.userLoggedIn",{
+		url: "/userLoggedIn",
+		templateUrl:"partials/userLoggedIn.html",
+		controller:"homeController"
+	})
 	.state("home.listResults",{
 		url: "/listResults",
 		templateUrl:"partials/listResults.html",
@@ -93,10 +103,20 @@ project.service("trackService", function(){
 	this.getNewPlaylist = function(){
 		return newPlaylist;
 	};
+	//-----------CONVERT MILISECONDS TO MINUTES-------------------------------------
+	this.millisToMinutes = function(millis) {
+	  var minutes = Math.floor(millis / 60000);
+	  var seconds = ((millis % 60000) / 1000).toFixed(0);
+	  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+	}
 });
 
 //---------------------CONTROLLERS------------------------
 project.controller("homeController", ['$scope', '$http', 'trackService', function($scope, $http, trackService){
+	//$scope.isloggedIn is for the login button
+	//$scope.showloggedIn is for the create new playlist, view my playlist and logout buttons
+	//$scope.show is for the button on the table
+	$scope.isloggedIn = false;
 	$scope.showloggedIn = false;
 	$scope.show = false;
 	$scope.currentUserId = trackService.getUserID();
@@ -112,16 +132,18 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 		    	console.log(data);
 		    	trackService.setUserID(data.id);
 		    	trackService.setUser(data);
-		    	if(data){$scope.showloggedIn = true;};
-		    	if(!data){$scope.showloggedIn = false;}	    	
+		    	if(data){
+		    		$scope.showloggedIn = true;
+		    		$scope.isloggedIn = true;
+		    		};
+		    	if(!data){$scope.showloggedIn = false;}	
+		    	$scope.$apply();    	
 			});    
 		});
 	};
 	$scope.logOut = function(){
-		// var user = trackService.getUser();
-		// user.logout().done(function() {
-		//    //todo when logout
-		// });
+		$scope.isloggedIn = false;
+		$scope.showloggedIn = false;
 	};
 	//-----------------SEARCH FOR SONGS----------------------
 	$scope.search = function(){
@@ -130,11 +152,17 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 	        console.log(response);
 	        if(response.data){	
 	        	$scope.searchResults = response.data.tracks.items;
-	        	console.log($scope.searchResults);
+	        	console.log($scope.show);
 	        	$scope.show = true;
+	        	//-----------TO CONVERT TO MINUTES----------
+	        	var mins = "";
+	        	for(var index = 0; index < $scope.searchResults.length; index++){
+	        		mins = trackService.millisToMinutes($scope.searchResults[index].duration_ms);
+	        		$scope.searchResults[index].duration_ms = mins;
+	        	};
+	        	//-----------------------------------------
             };
-            if (!response.data){$scope.show = false;};
-
+            if (!response.data){$scope.show = false;console.log($scope.show);};
 	    });
 	};	
 	$scope.getMyPlaylists = function(){
@@ -155,6 +183,7 @@ project.controller("homeController", ['$scope', '$http', 'trackService', functio
 	     }).done(function (data) {
 	     	$scope.currentUserPlaylists = trackService.getCurrentUserPlaylists();
     		console.log($scope.currentUserPlaylists);
+    		$scope.$apply();
     	});    
 	};
 }]);
@@ -195,7 +224,7 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
 	      console.log("ko");
 	    }
      	}).done(function (data) {
-			console.log("DONE");
+			alert("New Playlist Created!");
 		});    
 	};	
 
@@ -216,7 +245,6 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
 				};				
 			};
 		};
-		console.log(tracksToPlaylist);
 	};
 
 	//-------------ADD TRACK TO PLAYLIST----------------
@@ -234,7 +262,6 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
 			return uriList;
 		};
 		var uriList = $scope.getSelectedTracksURIS(tracksToPlaylist);
-		console.log(uriList);
 
 		//*******************ADD THE SONGS TO THE SPOTIFY PLAYLIST**************************
 		var newPlaylist = trackService.getNewPlaylist();
@@ -250,13 +277,13 @@ project.controller("createPlaylistController", ['$scope', '$http', '$localStorag
             'Content-Type': 'application/json',
         },
         success: function(data) {
-        	console.log("TRACKS ADDED TO THE NEW PLAYLIST");
+        	alert("Tracks added to the new Playlist!");
   		},
 	    error: function(data) {
-	      console.log("k.o");
+	      alert("Error: Please check your track selection, if you wish to add the same tracks again please reselect them.");
 	    }
      	}).done(function (data) {
-			console.log("DONE");
+     		tracksToPlaylist = [];
 		});
 
 	};
